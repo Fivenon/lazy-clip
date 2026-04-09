@@ -1,5 +1,7 @@
 import customtkinter as ctk
+from tkinter import filedialog
 import threading
+import main
 
 # Configuracion del tema visual
 ctk.set_appearance_mode("dark") 
@@ -10,7 +12,7 @@ class AppVideo(ctk.CTk):
         super().__init__()
 
         self.title("Lazy Clip")
-        self.geometry("1200x700") #Tamaño por defecto de la ventana
+        self.geometry("900x600") #Tamaño por defecto de la ventana
 
         # --- Variables de estado ---
         self.ruta_carpeta = ctk.StringVar(value="No seleccionada")
@@ -34,10 +36,10 @@ class AppVideo(ctk.CTk):
         rightFrame.pack(side="right", fill="both", expand=True)
 
         self.boton_seleccionar = ctk.CTkButton(leftFrame, width=200,height=50, text="Seleccionar Carpeta", command=self.seleccionar_carpeta)
-        self.boton_seleccionar.grid(row=1,column=0, padx=10, pady=20)
+        self.boton_seleccionar.grid(row=1,column=0, padx=10, pady=15)
 
         self.label_ruta = ctk.CTkLabel(leftFrame, textvariable=self.ruta_carpeta)
-        self.label_ruta.grid(row=2,column=0)
+        self.label_ruta.grid(row=2,column=0, padx=10,pady=5)
 
         # ----
         bottomFrame = ctk.CTkFrame(self, fg_color="#0D1117", height=65,corner_radius=0)
@@ -48,10 +50,12 @@ class AppVideo(ctk.CTk):
         self.boton_render.pack(side="left",padx=10, pady=5,fill="y")
 
     def seleccionar_carpeta(self):
-        print("AA")
+        directory = filedialog.askdirectory()
+        main.clipsPath = directory
+        self.ruta_carpeta.set(directory)
 
     def ejecutar_render(self):
-        print("BB")
+        main.render_video()
 
 # Punto de entrada
 if __name__ == "__main__":

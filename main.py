@@ -2,6 +2,7 @@ import moviepy
 from moviepy import concatenate_videoclips
 import os
 
+
 clipsPath = r"C:\Users\retra\OneDrive\Escritorio\Main\Code\clips"
 transitionVideo = moviepy.VideoFileClip(os.path.join(r"C:\Users\retra\OneDrive\Escritorio\Main\Code\lazy-clip\transition.mp4")).resized(new_size=(1920, 1080))
 clipsRaw = os.listdir(clipsPath)
