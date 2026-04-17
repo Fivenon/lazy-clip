@@ -10,7 +10,7 @@ threadsAvailable = psutil.cpu_count() - 1 #Cuantos hilos tiene la PC menos uno
 
 
 print(f"Se van a usar {threadsAvailable} hilos")
-def render_video(logger):
+def render_video():
     clips = []
     clipsRaw = os.listdir(clipsPath) #OJO, SI NO HAY UN PATH MARCA ERROR, HAY QUE SOLUCIONARLO
 
@@ -31,8 +31,7 @@ def render_video(logger):
         audio_bitrate = "320k", 
         threads = threadsAvailable, 
         preset = "medium",
-        fps = 30,
-        logger = logger
+        fps = 30
     ) 
 
     #----LIBERAMOS MEMORIA :p -------------------------------------
