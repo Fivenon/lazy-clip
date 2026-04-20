@@ -57,13 +57,13 @@ button {
 .panel-izquierdo {
     display: flex;
     flex-direction: column;
-    width: 40%;   
+    width: 30%;   
     height: 100%;              
          
 }
 
 .panel-derecho {
-    width: 60%;  
+    width: 70%;  
     height:100%; 
        
 }
@@ -77,13 +77,30 @@ button {
     padding: 5px 20px
 }
 
+hr.rounded {
+    margin:20px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-top: 2px solid #bbb;
+    border-radius: 34px;
+}
+
+.GPU-slider{
+    display: flex;
+    align-items: center;
+}
+.switch-text{
+    margin: 10px;
+    margin-right: 15px;
+    margin-left: 20px;
+}
+
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
-    margin: 5px;
-    margin-left: 15px;
+   
 }
 .switch input{
     opacity: 0;
@@ -133,6 +150,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
 
 .render-button{
     background: linear-gradient(135deg, #38d39f, #2ecc71);
