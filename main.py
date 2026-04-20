@@ -12,11 +12,11 @@ threadsAvailable = psutil.cpu_count() - 1 #Cuantos hilos tiene la PC menos uno
 print(f"Se van a usar {threadsAvailable} hilos")
 
 def selec_folder():
-    if os.listdir(clipsPath) != None:
-        clipsRaw = os.listdir(clipsPath) #OJO, SI NO HAY UN PATH MARCA ERROR, HAY QUE SOLUCIONARLO
+    if clipsPath and os.path.exists(clipsPath):
+        return os.listdir(clipsPath)
     else:
         print("NO HAY NINGUNA CARPETA SELECCIONADA")
-    return clipsRaw
+        return [] # Devolvemos lista vacía para que el for no explote :P
 
 def render_video():
     clips = []

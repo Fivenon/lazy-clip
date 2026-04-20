@@ -13,9 +13,16 @@
 
     <div class="main-content">
         <div class="panel-izquierdo">
-            <button class="select-button", onclick="pywebview.api.seleccionar_carpeta()">Seleccionar carpeta</button>
+            <button class="select-button", id="select-button", onclick="pywebview.api.seleccionar_carpeta()">Seleccionar carpeta</button>
             <p class="path-text", id="path-text">No hay ninguna ruta seleccionada</p>
             <p class="clips-found", id="clips-found"> Cantidad de clips encontrados: 0</p>
+            
+            <!-- Rounded switch -->
+             <span>Usar GPU</span>
+            <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+            </label>
         </div>
 
         <div class="panel-derecho">
@@ -24,7 +31,7 @@
     </div>
 
     <div class="footer">
-        <button class="render-button", onclick="pywebview.api.iniciar_render()">INICIAR RENDER</button>
+        <button class="render-button", id="render-button", onclick="pywebview.api.iniciar_render()">INICIAR RENDER</button>
     </div>
 
 

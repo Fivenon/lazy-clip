@@ -14,8 +14,8 @@ class ProyectosAPI:
             ruta_para_js = json.dumps(ruta_real) #Para que JS no se vuelva loco con los caracteres
             window.evaluate_js(f"document.getElementById('path-text').innerText = {ruta_para_js}")
 
-            files = main.os.listdir(main.clipsPath)
-            valid_clips = [f for f in files if f.lower().endswith(('.mp4,' '.wav'))]
+            files = os.listdir(ruta_real)
+            valid_clips = [f for f in files if f.lower().endswith(('.mp4', '.wav'))]
             clipsQuantity = len(valid_clips)
             print(clipsQuantity)
             window.evaluate_js(f"document.getElementById('clips-found').innerText = 'Cantidad de clips encontrados: {clipsQuantity}'  ")
@@ -24,9 +24,15 @@ class ProyectosAPI:
         threading.Thread(target=self._ejecutar_proceso, daemon=True).start()
     def _ejecutar_proceso(self):
         try:
+            window.evaluate_js("document.getElementById('render-button').disabled = true")
+            window.evaluate_js("document.getElementById('select-button').disabled = true")
             main.render_video()
         except Exception as e:
-            window.evaluate_js(f"alert('Error: {str(e)}')")
+            ee = json.dumps(e)
+            window.evaluate_js(f"alert('Error: {str(ee)}')")
+        finally:
+            window.evaluate_js("document.getElementById('render-button').disabled = false")
+            window.evaluate_js("document.getElementById('select-button').disabled = false")
 
 api = ProyectosAPI()
 window = webview.create_window(
