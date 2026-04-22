@@ -3,6 +3,14 @@ import threading
 import main
 import json
 import os
+import sys
+
+# Cosas de importacion IDK
+def resource_path(relative_path):
+    """ Obtiene la ruta absoluta de los recursos, compatible con PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 class ProyectosAPI:
 
@@ -18,8 +26,7 @@ class ProyectosAPI:
             valid_clips = [f for f in files if f.lower().endswith(('.mp4', '.wav'))]
             clipsQuantity = len(valid_clips)
             print(clipsQuantity)
-            window.evaluate_js(f"document.getElementById('clips-found').innerText = 'Cantidad de clips encontrados: {clipsQuantity}'  ")
-
+            window.evaluate_js(f"document.getElementById('clips-found').innerText = 'Clips encontrados: {clipsQuantity}'")
     def iniciar_render(self):
         threading.Thread(target=self._ejecutar_proceso, daemon=True).start()
     def _ejecutar_proceso(self):
@@ -50,8 +57,23 @@ class ProyectosAPI:
                 window.rotarInterval = setInterval(rotarImagen, 4000);                   
             """)
             
-
-            main.render_video()
+            window.evaluate_js("""
+                window.actualizarBarra = function(valor, transcurrido, restante) {
+                let barra = document.getElementById('barra-progreso');
+                let tiempos = document.getElementById('progreso-text');
+                if (barra) 
+                    {
+                    barra.style.width = valor + '%';
+                    }
+                if (tiempos) {
+                    tiempos.innerText = 'Transcurrido: ' + transcurrido + '  |  Restante: ' + restante;
+                }
+                };
+                window.actualizarBarra(0, '00:00', '--:--');  
+            """)
+            
+            main.render_video(window)
+            
         except Exception as e: 
             error_msg = json.dumps(str(e))
             window.evaluate_js(f"alert('Error: ' + {error_msg})")
@@ -68,8 +90,7 @@ class ProyectosAPI:
                 }
                 document.getElementById('preview').src = 'No preview image.jpg';
             """)
-            
-            
+                        
     def toggle_gpu(self, valor_switch):
         if valor_switch:
             main.use_gpu = True
@@ -79,7 +100,7 @@ class ProyectosAPI:
 api = ProyectosAPI()
 window = webview.create_window(
     title="Lazy Clip",
-    url="index.html",
+    url=resource_path("index.html"),
     js_api=api,
     width=900,
     height=650,

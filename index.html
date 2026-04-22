@@ -15,7 +15,7 @@
         <div class="panel-izquierdo">
             <button class="select-button", id="select-button", onclick="pywebview.api.seleccionar_carpeta()">Seleccionar carpeta</button>
             <p class="path-text", id="path-text">No hay ninguna ruta seleccionada</p>
-            <p class="clips-found", id="clips-found"> Cantidad de clips encontrados: 0</p>
+            <p class="clips-found", id="clips-found">Clips encontrados: 0</p>
             <hr class="rounded">
 
             <div class="GPU-slider">
@@ -32,6 +32,10 @@
 
         <div class="panel-derecho">
             <img id="preview" src="No preview image.jpg" alt="preview">
+            <div class="progreso-container" >
+                <div class="barra-progreso" id="barra-progreso"></div>
+                <p class="progreso-text" id="progreso-text"></p>
+            </div>
         </div>
     </div>
 
