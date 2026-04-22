@@ -26,13 +26,55 @@ class ProyectosAPI:
         try:
             window.evaluate_js("document.getElementById('render-button').disabled = true")
             window.evaluate_js("document.getElementById('select-button').disabled = true")
+            window.evaluate_js("document.getElementById('gpu-switch').disabled = true")
+
+            main.preparar_clips()
+            lista_fotos = main.get_frames() 
+            previews_json = json.dumps(lista_fotos)
+            window.evaluate_js(f"""
+                if (window.rotarInterval) clearInterval(window.rotarInterval);
+
+                var previews = {previews_json};
+                var index = 0;
+                var imgElement = document.getElementById('preview');
+
+                function rotarImagen() {{
+                    if (previews.length > 0) {{
+                        imgElement.src = previews[index] + "?t=" + new Date().getTime();
+                        index = (index + 1) % previews.length;
+                    }}
+                }}
+
+                rotarImagen();
+                // Guardamos el ID en window para poder limpiarlo después
+                window.rotarInterval = setInterval(rotarImagen, 4000);                   
+            """)
+            
+
             main.render_video()
-        except Exception as e:
-            ee = json.dumps(e)
-            window.evaluate_js(f"alert('Error: {str(ee)}')")
+        except Exception as e: 
+            error_msg = json.dumps(str(e))
+            window.evaluate_js(f"alert('Error: ' + {error_msg})")
         finally:
             window.evaluate_js("document.getElementById('render-button').disabled = false")
             window.evaluate_js("document.getElementById('select-button').disabled = false")
+            window.evaluate_js("document.getElementById('gpu-switch').disabled = false")
+            
+            # DETENER IMAGENES
+            window.evaluate_js("""
+                if (window.rotarInterval) {
+                    clearInterval(window.rotarInterval);
+                    window.rotarInterval = null;
+                }
+                document.getElementById('preview').src = 'No preview image.jpg';
+            """)
+            
+            
+    def toggle_gpu(self, valor_switch):
+        if valor_switch:
+            main.use_gpu = True
+        else:
+            main.use_gpu = False      
 
 api = ProyectosAPI()
 window = webview.create_window(
@@ -40,7 +82,8 @@ window = webview.create_window(
     url="index.html",
     js_api=api,
     width=900,
-    height=600
+    height=650,
+    min_size=(900,650)
 )
 
 if __name__ == "__main__":
