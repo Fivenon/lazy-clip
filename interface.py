@@ -1,6 +1,7 @@
 import webview
 import threading
 import main
+from main import THUMBS_DIR
 import json
 import os
 import sys
@@ -81,6 +82,7 @@ class ProyectosAPI:
             window.evaluate_js("document.getElementById('render-button').disabled = false")
             window.evaluate_js("document.getElementById('select-button').disabled = false")
             window.evaluate_js("document.getElementById('gpu-switch').disabled = false")
+           
             
             # DETENER IMAGENES
             window.evaluate_js("""
@@ -90,6 +92,7 @@ class ProyectosAPI:
                 }
                 document.getElementById('preview').src = 'No preview image.jpg';
             """)
+            main.delete_thumbs()
                         
     def toggle_gpu(self, valor_switch):
         if valor_switch:
@@ -104,8 +107,9 @@ window = webview.create_window(
     js_api=api,
     width=900,
     height=650,
-    min_size=(900,650)
+    min_size=(900,650),
+    
 )
 
 if __name__ == "__main__":
-    webview.start()
+    webview.start(debug=True, http_server=True)

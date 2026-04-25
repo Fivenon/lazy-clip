@@ -5,11 +5,14 @@ import psutil
 from proglog import ProgressBarLogger
 import time
 import sys
+import tempfile, shutil
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
+# Definimos una carpeta temporal fija para esta sesión
+THUMBS_DIR = os.path.join(os.getcwd(), "thumbnails")
 
 clipsPath = ""
 transitionVideo = moviepy.VideoFileClip(resource_path("transition.mp4")).resized(new_size=(1920, 1080))
@@ -78,17 +81,22 @@ def preparar_clips():
     
 def get_frames():
     global clips
-    if not os.path.exists("thumbnails"):
-        os.makedirs("thumbnails")
+    if not os.path.exists("THUMBS_DIR"):
+        os.makedirs("THUMBS_DIR")
         
     frames = []
     for i, c in enumerate(clips):
-        ruta_frames = f"thumbnails/frame_{i}.jpg"
-        
+        nombre_archivo = f"frame{i}.jpg"
+        ruta_frames = os.path.join("THUMBS_DIR", nombre_archivo)
         c.save_frame(ruta_frames, t=1)
-        frames.append(ruta_frames)
+        
+        frames.append(f"/thumbnails/{nombre_archivo}")
             
     return frames    
+
+def delete_thumbs():
+    if os.path.exists("THUMBS_DIR"):
+        shutil.rmtree("THUMBS_DIR")
 
 #PROGRESS BAR
 class CustomLogger(ProgressBarLogger):
