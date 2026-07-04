@@ -162,10 +162,4 @@ class CustomLogger(ProgressBarLogger):
                 if self.window:
                     self.window.evaluate_js(f"window.actualizarBarra({porcentaje}, '{mins_trans:02d}:{segs_trans:02d}', '{mins_rest:02d}:{segs_rest:02d}')")
             except:
-                pass
-            
-                
-            
-                
-
-            
+                pass    
